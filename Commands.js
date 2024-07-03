@@ -6,24 +6,7 @@ async function deleteInput(page, inp) {
 }
 
 async function gelbeSeitencookie(page) {
-    //laden
-    //await page.setViewport({ width: 1620, height: 1080 });
-    //click1
     await mouseClickID(page, "cmpbntsavetxt");
-    // await page.waitForTimeout(3000);
-    // await page.mouse.click(915, 725);
-    // await page.waitForTimeout(1000);
-    // await page.mouse.click(655, 645);
-    // await page.waitForTimeout(1000);
-    //await page.screenshot({ path:' x_newSite.png' });
-}
-
-async function type_slow(page, input, text) {
-    let letters = text.split("");
-    for (let l = 0; l < letters.length; l++) {
-        await page.type(input, letters[l]);
-        await page.waitForTimeout(1000);
-    }
 }
 
 async function gelbeSeiten_enter_adress(page, was, wo) {
@@ -43,50 +26,16 @@ async function gelbeSeiten_enter_adress(page, was, wo) {
     await page.click('button[class="gc-btn gc-btn--black gc-btn--l search_go"]');
 }
 
-async function lieferando_enter_adress(page, was, wo) {
-    try {
-        await page.waitForSelector('input[id="combobox-input_0"]', { visible: true, timeout: 10000 });
-    } catch (error) {
-        await console.log("warten abgebrochen");
-    }
-    try {
-        await page.waitForTimeout(1000);
-        await mouseClickTag(page, "label", 0);
-        await page.waitForTimeout(1000);
-        await deleteInput(page, 'input[id="combobox-input_0"]');
-        await page.waitForTimeout(1000);
-        await type_slow(page, 'input[id="combobox-input_0"]', was);
-        await console.log(was + ". wurden eingefuegt");
-    } catch (e) {
-        await console.log("warten abgebrochen: ", e);
-    }
-    try {
-        await page.waitForSelector('div[class="_2GljJ _2PIGg"]', { visible: true, timeout: 30000 });
-        // await page.click('div[class="_2GljJ _2PIGg"]')[0];
-        await page.waitForTimeout(3000);
-        await mouseClickClass(page, "_2GljJ _2PIGg", 0);
-        await console.log(was + ". wurden angeklickt");
-
-    } catch (error) {
-        await console.log("Diese Postleitzahl ist nicht in Lieferando hinterlegt");
-        await page.waitForTimeout(3000);
-    }
-}
-
 async function buttonClick(page, txt) {
     let s = await page.evaluate(() => {
         let get1 = document.getElementsByClassName('button');
         for (let element = 0; element < get1.length; element++) {
             if (get1[element].innerHTML == txt) {
-                //set1 = get1[element].innerHTML;
                 get1[element].click();
                 return element;
             }
         }
     });
-    //let {x,y} = await mouseClickClass(page, 'button', s);
-    //await console.log("2. x: "+ x + "y: "+ y);
-    //return {x,y};
 }
 
 async function gelbeSeiten_findElements(page) {
@@ -129,23 +78,6 @@ async function gelbeSeiten_findElements(page) {
     await save_in_excel(x);
 }
 
-
-async function lieferando_findElements(page) {
-    try {
-        let x = await page.evaluate(() => {
-            let attribut = document.getElementsByClassName('tpNNO fBvBJ _1DS7j'), list = [];
-            for (let x = 0; x < attribut.length; x++) {
-                list.push(attribut[x].innerText);
-            }
-            return list;
-        });
-        await console.log(x);
-    } catch (error) {
-        await console.log(error);
-    }
-    // await save_in_excel(x);
-}
-
 async function save_in_excel(list) {
     //save in new excel file or else the data will be deleted
     let excel = require('excel4node');
@@ -179,23 +111,10 @@ async function save_in_excel(list) {
 async function klickWeiter(page) {
     let xs = 1, ys = 1;
     while ((xs != 0) && (ys != 0)) {
-        //await page.click('a[id="mod-LoadMore--button"]');
         await autoScroll(page);
-        //await page.waitForTimeout(100);
         let { x, y } = await mouseClickID(page, "mod-LoadMore--button");
         ys = y;
         xs = x;
-        /*await page.mouse.move((Math.floor(Math.random() * 10)*1000), (Math.floor(Math.random() * 10)*1000), { steps: 100 });
-        await page.waitForTimeout((Math.floor(Math.random() * 10)*100));
-
-        await page.mouse.move(x-5, y, { steps: 10 });
-        await page.waitForTimeout((Math.floor(Math.random() * 10)*10));
-
-        //await page.waitForTimeout(500);
-        //await page.mouse.click(615, 540);
-        await page.mouse.click(x, y);
-        await page.mouse.move(x+5, y, { steps: 5 });*/
-
     }
 }
 
@@ -206,16 +125,13 @@ async function mouseClickTag(page, tag1, i) {
             let { top, left, bottom, right } = v[i].getBoundingClientRect();
             let x = Math.round((left + right) / 2);
             let y = Math.round((top + bottom) / 2);
-            //alert(x + " , " + y + " : " + top + " , " + left + " , " + bottom + " , " + right);
             return { x, y };
         }, tag1, i);
         await page.mouse.click(x, y, { button: 'left' });
-        //await console.log("1. x: "+ x + "y: "+ y);
         return { x, y };
     } catch (error) {
         await console.log("Click with mouse didnt work on \"" + tag1 + "\"\nError " + error);
     }
-    //await console.log(x + " , " + y + " , " + i);
 }
 
 async function mouseClickClass(page, class1, i) {
@@ -225,11 +141,9 @@ async function mouseClickClass(page, class1, i) {
             let { top, left, bottom, right } = v[i].getBoundingClientRect();
             let x = Math.round((left + right) / 2);
             let y = Math.round((top + bottom) / 2);
-            //alert(x + " , " + y + " : " + top + " , " + left + " , " + bottom + " , " + right);
             return { x, y };
         }, class1, i);
         await page.mouse.click(x, y, { button: 'left' });
-        //await console.log("1. x: "+ x + "y: "+ y);
         return { x, y };
     } catch (error) {
         await console.log("Click with mouse didnt work on \"" + class1 + "\"\nError " + error);
@@ -243,7 +157,6 @@ async function mouseClickID(page, id) {
         let { top, left, bottom, right } = v.getBoundingClientRect();
         let x = Math.round((left + right) / 2);
         let y = Math.round((top + bottom) / 2);
-        //alert(x + " , " + y + " : " + top + " , " + left + " , " + bottom + " , " + right);
         return { x, y };
     }, id);
     await page.mouse.click(x, y, { button: 'left' });
@@ -274,13 +187,11 @@ async function EndChrome(pid) {
     let shell = require('shelljs');
     await console.log("Chrome closed");
     await shell.exec('TASKKILL /PID ' + pid + ' /F');
-    //await shell.exec('TASKKILL /?');
 }
 
 async function EndAllChrome(pid) {
     let shell = require('shelljs');
     await shell.exec('TASKKILL /IM chrome.exe /F');
-    //await shell.exec('TASKKILL /?');
 }
 
 async function getURL(page) {
