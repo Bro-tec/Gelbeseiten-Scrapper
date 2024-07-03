@@ -202,14 +202,9 @@ async function getURL(page) {
 module.exports.getURL = getURL;
 module.exports.autoScroll = autoScroll;
 module.exports.EndChrome = EndChrome;
-module.exports.mouseClickTag = mouseClickTag;
-module.exports.mouseClickClass = mouseClickClass;
-module.exports.mouseClickID = mouseClickID;
 module.exports.gelbeSeitencookie = gelbeSeitencookie;
 module.exports.buttonClick = buttonClick;
 module.exports.gelbeSeiten_findElements = gelbeSeiten_findElements;
-module.exports.lieferando_findElements = lieferando_findElements;
 module.exports.klickWeiter = klickWeiter;
 module.exports.deleteInput = deleteInput;
 module.exports.gelbeSeiten_enter_adress = gelbeSeiten_enter_adress;
-module.exports.lieferando_enter_adress = lieferando_enter_adress;
